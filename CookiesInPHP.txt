@@ -1,0 +1,61 @@
+Cookie
+Cookies in PHP are a way to store small amounts of data on the client side, which the server can later retrieve. They are commonly used to manage user sessions, preferences, and other lightweight data that needs to persist between requests.
+
+Setting Cookies in PHP
+To set a cookie, you use the setcookie() function. This function should be called before any output is sent to the browser, such as HTML or echo statements.
+
+Syntax:
+
+php
+Copy code
+bool setcookie(
+    string $name,
+    string $value = "",
+    int $expires_or_options = 0,
+    string $path = "",
+    string $domain = "",
+    bool $secure = false,
+    bool $httponly = false
+)
+Example:
+
+php
+Copy code
+<?php
+// Set a cookie named "user" with the value "John Doe"
+setcookie("user", "John Doe", time() + (86400 * 30), "/"); // Expires in 30 days
+?>
+Parameters:
+
+$name: The name of the cookie.
+$value: The value of the cookie.
+$expires_or_options: Expiry time as a Unix timestamp (e.g., time() + 3600 for 1 hour).
+$path: Path on the server where the cookie is accessible (default is /).
+$domain: Domain for the cookie (e.g., example.com).
+$secure: If true, the cookie is sent only over HTTPS.
+$httponly: If true, the cookie is accessible only via HTTP(S) and not JavaScript.
+Accessing Cookies
+Cookies are stored in the $_COOKIE superglobal array.
+
+Example:
+
+php
+Copy code
+<?php
+if (isset($_COOKIE["user"])) {
+    echo "User is: " . $_COOKIE["user"];
+} else {
+    echo "Cookie 'user' is not set!";
+}
+?>
+Deleting Cookies
+To delete a cookie, set its expiration time to a past date.
+
+Example:
+
+php
+Copy code
+<?php
+// Delete the "user" cookie
+setcookie("user", "", time() - 3600, "/");
+?>

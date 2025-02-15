@@ -1,0 +1,90 @@
+Session
+
+Sessions in PHP allow you to store user-specific information on the server across multiple requests. Unlike cookies, session data is stored on the server, and only a session ID is stored on the client side (in a cookie or URL).
+
+Starting a Session
+To use sessions, you must first start the session using the session_start() function. This function must be called before any output is sent to the browser.
+
+Example:
+
+php
+<?php
+// Start the session
+session_start();
+
+// Store session data
+$_SESSION["username"] = "JohnDoe";
+$_SESSION["email"] = "john@example.com";
+
+echo "Session variables are set.";
+?>
+Accessing Session Data
+Session data is accessed through the $_SESSION superglobal array.
+
+Example:
+
+php
+Copy code
+<?php
+session_start();
+
+// Access session data
+if (isset($_SESSION["username"]) && isset($_SESSION["email"])) {
+    echo "Username: " . $_SESSION["username"];
+    echo "Email: " . $_SESSION["email"];
+} else {
+    echo "No session data found.";
+}
+?>
+Modifying Session Data
+You can modify session variables just like you would modify any array.
+
+Example:
+
+php
+Copy code
+<?php
+session_start();
+
+// Modify session data
+$_SESSION["username"] = "Subhabrata Sinha";
+$_SESSION["email"] = "sinha_subhabrata78@yahoo.com";
+echo "Updated username: " . $_SESSION["username"];
+echo "Updated email: " . $_SESSION["email"];
+?>
+Removing Session Variables
+You can remove specific session variables using unset() or destroy all session data using session_destroy().
+
+Example: Remove a specific variable
+
+php
+Copy code
+<?php
+session_start();
+
+// Remove a single session variable
+unset($_SESSION["username"]);
+?>
+Example: Destroy the entire session
+
+php
+Copy code
+<?php
+session_start();
+
+// Destroy the session
+session_destroy();
+echo "Session destroyed.";
+?>
+Note: After calling session_destroy(), the session ID still exists until a new session is started. To completely clear the session, you can also unset the $_SESSION array:
+
+php
+Copy code
+$_SESSION = [];
+
+
+
+
+
+
+
