@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AngularJS Directives Example</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <style>
+        .highlight { color: red; font-weight: bold; }
+    </style>
+</head>
+<body ng-app="myApp">
+
+    <div ng-controller="myController">
+        
+        <!-- ng-model: Two-way data binding -->
+        <h2>ng-model Example</h2>
+        <input type="text" ng-model="name">
+        <p>Your name is: {{ name }}</p>
+
+        <!-- ng-repeat: Loop through array -->
+        <h2>ng-repeat Example</h2>
+        <ul>
+            <li ng-repeat="fruit in fruits">{{ fruit }}</li>
+        </ul>
+
+        <!-- ng-if: Conditional display -->
+        <h2>ng-if Example</h2>
+        <p ng-if="isVisible">This text is visible!</p>
+
+        <!-- ng-show / ng-hide -->
+        <h2>ng-show / ng-hide Example</h2>
+        <button ng-click="toggleVisibility()">Toggle</button>
+        <p ng-show="isVisible">This is shown when isVisible is true.</p>
+
+        <!-- ng-click: Handling button clicks -->
+        <h2>ng-click Example</h2>
+        <button ng-click="incrementCounter()">Click Me</button>
+        <p>Button clicked: {{ counter }} times</p>
+
+        <!-- ng-class: Dynamically apply CSS class -->
+        <h2>ng-class Example</h2>
+        <p ng-class="{'highlight': isHighlighted}">This text changes color when highlighted.</p>
+        <button ng-click="toggleHighlight()">Toggle Highlight</button>
+
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
+Step 2: Create AngularJS Controller (app.js)
+// Create an AngularJS module
+var app = angular.module("myApp", []);
+
+// Define the controller
+app.controller("myController", function($scope) {
+    
+    // ng-model example
+    $scope.name = "John Doe";
+
+    // ng-repeat example
+    $scope.fruits = ["Apple", "Banana", "Mango", "Orange"];
+
+    // ng-if example
+    $scope.isVisible = true;
+
+    // ng-show / ng-hide example
+    $scope.toggleVisibility = function() {
+        $scope.isVisible = !$scope.isVisible;
+    };
+
+    // ng-click example
+    $scope.counter = 0;
+    $scope.incrementCounter = function() {
+        $scope.counter++;
+    };
+
+    // ng-class example
+    $scope.isHighlighted = false;
+    $scope.toggleHighlight = function() {
+        $scope.isHighlighted = !$scope.isHighlighted;
+    };
+
+});
