@@ -1,0 +1,65 @@
+Unit testing in AngularJS is typically done using Jasmine as the testing framework and Karma as the test runner. Below is a step-by-step guide to writing unit tests in AngularJS.
+
+Step 1: Install Required Dependencies
+If you haven't already, install Karma, Jasmine, and AngularJS mocks:
+npm install -g karma-cli
+npm install --save-dev karma karma-jasmine jasmine-core karma-chrome-launcher karma-angular-filesort karma-coverage karma-jasmine-html-reporter angular-mocks
+npm install angular angular-mocks --save-dev
+Step 2: Configure Karma
+Create a karma.conf.js file in your project root with the following configuration:
+module.exports = function (config) {
+  config.set({
+    basePath: '',
+    frameworks: ['jasmine'],
+    files: [
+      'node_modules/angular/angular.js',
+      'node_modules/angular-mocks/angular-mocks.js',
+      'app/**/*.js',
+      'test/**/*.spec.js'
+    ],
+    preprocessors: {
+      'app/**/*.js': ['coverage']
+    },
+    reporters: ['progress', 'coverage'],
+    browsers: ['Chrome'],
+    singleRun: false
+  });
+};
+Step 3: Create an AngularJS Service
+Let's create a simple AngularJS service in app/services/myService.js:
+angular.module('myApp', [])
+  .service('myService', function () {
+    this.add = function (a, b) {
+      return a + b;
+    };
+
+    this.multiply = function (a, b) {
+      return a * b;
+    };
+  });
+Step 4: Write Unit Tests
+Create a test file test/services/myService.spec.js and write the unit tests for myService.
+describe('myService', function () {
+  var myService;
+
+  // Load the module before each test
+  beforeEach(module('myApp'));
+
+  // Inject the service before each test
+  beforeEach(inject(function (_myService_) {
+    myService = _myService_;
+  }));
+
+  // Test add function
+  it('should add two numbers correctly', function () {
+    expect(myService.add(2, 3)).toBe(5);
+  });
+
+  // Test multiply function
+  it('should multiply two numbers correctly', function () {
+    expect(myService.multiply(2, 3)).toBe(6);
+  });
+});
+Step 5: Run the Tests
+Run the following command to execute your tests:
+karma start
