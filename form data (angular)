@@ -1,0 +1,124 @@
+index9.html
+________________________
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AngularJS Form Example</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+</head>
+<body ng-app="myApp">
+    <div ng-controller="FormController">
+        <form name="userForm" ng-submit="submitForm()" novalidate>
+            <label>Name:</label>
+            <input type="text" name="name" ng-model="user.name" required>
+            <span ng-show="userForm.name.$touched && userForm.name.$invalid">Required</span>
+            <br>
+
+            <label>Email:</label>
+            <input type="email" name="email" ng-model="user.email" required>
+            <span ng-show="userForm.email.$touched && userForm.email.$invalid">Invalid Email</span>
+            <br>
+
+            <label>Age:</label>
+            <input type="number" name="age" ng-model="user.age" min="18" required>
+            <span ng-show="userForm.age.$touched && userForm.age.$invalid">Age must be 18+</span>
+            <br>
+
+            <button type="submit" ng-disabled="userForm.$invalid">Submit</button>
+        </form>
+
+        <p><strong>Form Data:</strong> {{ user }}</p>
+    </div>
+
+    <script src="app9.js"></script>
+    <script src="userService9.js"></script>
+
+</body>
+</html>
+
+app9.js
+----------------------------
+
+var app = angular.module('myApp', []);
+
+app.controller('FormController', function ($scope, UserService) {
+    $scope.user = {
+        name: '',
+        email: '',
+        age: ''
+    };
+
+    $scope.submitForm = function () {
+        if ($scope.userForm.$valid) {
+            UserService.saveUser($scope.user);
+        }
+    };
+});.....
+
+_____________________________________________
+userService9.js
+
+app.service('UserService', function () {
+    var savedUser = {};
+
+    this.saveUser = function (user) {
+        savedUser = angular.copy(user);
+        console.log('User Saved:', savedUser);
+    };
+
+    this.getUser = function () {
+        return savedUser;
+    };
+});
+---------------------------------
+
+/* styles9.css */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    padding: 20px;
+}
+
+form {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+button:disabled {
+    background-color: #ccc;
+}
+span {
+    color: red;
+    font-size: 12px;
+}
+p {
+    background-color: #e7f3fe;
+    padding: 10px;
+    border-radius: 3px;
+    border: 1px solid #b3d4fc;
+}
