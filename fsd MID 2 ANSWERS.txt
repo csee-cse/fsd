@@ -1,0 +1,990 @@
+﻿1)        Create A Database Called MyDatabase1 in MySQL. Then create a table under the MyDatabase1 called users it will have 3 columns id, name and email. Insert some sample rows under the users table. Write a PHP Script to retrieve all records from users table and display them.
+ChatGPT said:
+Here’s a complete guide to achieve this:
+________________
+
+
+Step 1: Create the MySQL Database and Table
+Run the following SQL commands in your MySQL database:
+sql
+CopyEdit
+-- Create Database
+CREATE DATABASE MyDatabase1;
+
+
+-- Use the Database
+USE MyDatabase1;
+
+
+-- Create Users Table
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE
+);
+
+
+-- Insert Sample Data
+INSERT INTO users (name, email) VALUES 
+('Alice Johnson', 'alice@example.com'),
+('Bob Smith', 'bob@example.com'),
+('Charlie Brown', 'charlie@example.com');
+
+
+________________
+
+
+Step 2: Create a PHP Script to Retrieve and Display Data
+Save the following PHP script as fetch_users.php:
+php
+CopyEdit
+<?php
+// Database connection variables
+$servername = "localhost";  // Change if using a different host
+$username = "root";         // Change according to your MySQL setup
+$password = "";             // Change if you have a MySQL password
+$database = "MyDatabase1";  
+
+
+// Create connection
+$conn = new mysqli($servername, $username, $password, $database);
+
+
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+
+// Query to fetch data from users table
+$sql = "SELECT * FROM users";
+$result = $conn->query($sql);
+
+
+// Check if there are rows and display them
+if ($result->num_rows > 0) {
+    echo "<h2>Users List</h2>";
+    echo "<table border='1'>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+            </tr>";
+    
+    while($row = $result->fetch_assoc()) {
+        echo "<tr>
+                <td>".$row["id"]."</td>
+                <td>".$row["name"]."</td>
+                <td>".$row["email"]."</td>
+              </tr>";
+    }
+    
+    echo "</table>";
+} else {
+    echo "No records found.";
+}
+
+
+// Close connection
+$conn->close();
+?>
+
+
+________________
+
+
+Step 3: Run the PHP Script
+* Save the script as fetch_users.php
+* Place it in your web server directory (htdocs if using XAMPP)
+* Start Apache and MySQL in XAMPP
+* Open your browser and visit:
+👉 http://localhost/fetch_users.php
+This will display all records from the users table in a neat table format.
+Let me know if you need modifications! 🚀
+4o
+You said:
+2)         Create A Database Called MyDatabase1 in MySQL. Then create a table under the MyDatabase1 called users it will have 3 columns id, name and email. Write a PHP Script to insert the following row into the users table. id=1, name = "John Doe", email = john@example.com. On successful insertion it will display "New record created successfully".
+ChatGPT said:
+Step 1: Create the MySQL Database and Table
+Run the following SQL commands in your MySQL database:
+sql
+CopyEdit
+-- Create Database
+CREATE DATABASE MyDatabase1;
+
+
+-- Use the Database
+USE MyDatabase1;
+
+
+-- Create Users Table
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE
+);
+
+
+________________
+
+
+Step 2: Create a PHP Script to Insert Data
+Save the following PHP script as insert_user.php:
+php
+CopyEdit
+<?php
+// Database connection variables
+$servername = "localhost";  // Change if using a different host
+$username = "root";         // Change according to your MySQL setup
+$password = "";             // Change if you have a MySQL password
+$database = "MyDatabase1";  
+
+
+// Create connection
+$conn = new mysqli($servername, $username, $password, $database);
+
+
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+
+// SQL query to insert data
+$sql = "INSERT INTO users (id, name, email) VALUES (1, 'John Doe', 'john@example.com')";
+
+
+if ($conn->query($sql) === TRUE) {
+    echo "New record created successfully";
+} else {
+    echo "Error: " . $sql . "<br>" . $conn->error;
+}
+
+
+// Close connection
+$conn->close();
+?>
+
+
+________________
+
+
+Step 3: Run the PHP Script
+   * Save the script as insert_user.php
+   * Place it in your web server directory (htdocs if using XAMPP)
+   * Start Apache and MySQL in XAMPP
+   * Open your browser and visit:
+👉 http://localhost/insert_user.php
+Expected Output:
+ ✅ "New record created successfully"
+________________
+
+
+Additional Notes:
+      * If you run this script multiple times, you might get a duplicate entry error because we manually set id=1.
+      * To allow multiple insertions without conflicts, remove id=1 from the SQL query:
+php
+CopyEdit
+$sql = "INSERT INTO users (name, email) VALUES ('John Doe', 'john@example.com')";
+
+
+This will allow id to auto-increment.
+Let me know if you need any modifications! 🚀
+4o
+You said:
+3)        Write a html form to accept name and email from the user. On Submitting the form it will call a PHP script with GET request. The PHP Script will retrieve the data submitted from the form and display them into the browser.
+ChatGPT said:
+Step 1: Create an HTML Form (index.html)
+Save this file as index.html. It will collect the user’s name and email and send them via a GET request to the PHP script.
+html
+CopyEdit
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submit Form</title>
+</head>
+<body>
+    <h2>User Information Form</h2>
+    <form action="display.php" method="GET">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required>
+        <br><br>
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+        <br><br>
+        <input type="submit" value="Submit">
+    </form>
+</body>
+</html>
+
+
+________________
+
+
+Step 2: Create the PHP Script (display.php)
+Save this file as display.php. It retrieves the submitted data using the $_GET superglobal and displays them.
+php
+CopyEdit
+<?php
+// Check if GET parameters exist
+if (isset($_GET["name"]) && isset($_GET["email"])) {
+    $name = htmlspecialchars($_GET["name"]); // Sanitize input
+    $email = htmlspecialchars($_GET["email"]); // Sanitize input
+
+
+    echo "<h2>Submitted Data</h2>";
+    echo "<p><strong>Name:</strong> " . $name . "</p>";
+    echo "<p><strong>Email:</strong> " . $email . "</p>";
+} else {
+    echo "No data received.";
+}
+?>
+
+
+________________
+
+
+Step 3: Run the Form and PHP Script
+      1. Save both index.html and display.php in your web server directory (htdocs if using XAMPP).
+      2. Start Apache in XAMPP.
+      3. Open a browser and go to:
+👉 http://localhost/index.html
+      4. Fill out the form and submit.
+Expected Output:
+ After submitting, it redirects to display.php and shows:
+less
+CopyEdit
+Submitted Data
+Name: [Entered Name]
+Email: [Entered Email]
+
+
+✅ Let me know if you need modifications! 🚀
+4o
+You said:
+4)        Write a PHP script to set the Cookie with the name “user” and the value will be “John Doe”. Write another PHP script to retrieve the cookie with the name “user” and display the value. At last write a PHP script to delete the cookie with the name “user”.
+ChatGPT said:
+Step 1: Set a Cookie (set_cookie.php)
+This script sets a cookie named "user" with the value "John Doe" that expires in 1 hour.
+php
+CopyEdit
+<?php
+// Set a cookie named "user" with value "John Doe" that expires in 1 hour
+setcookie("user", "John Doe", time() + 3600, "/"); // 3600 seconds = 1 hour
+
+
+echo "Cookie 'user' has been set!";
+?>
+
+
+📌 How it works:
+         * setcookie("user", "John Doe", time() + 3600, "/");
+         * "user" → Cookie name
+         * "John Doe" → Cookie value
+         * time() + 3600 → Expiration time (1 hour from now)
+         * "/" → Available across the entire website
+________________
+
+
+Step 2: Retrieve and Display the Cookie (get_cookie.php)
+This script retrieves and displays the cookie's value.
+php
+CopyEdit
+<?php
+// Check if the cookie is set
+if(isset($_COOKIE["user"])) {
+    echo "User Cookie Value: " . $_COOKIE["user"];
+} else {
+    echo "Cookie 'user' is not set.";
+}
+?>
+
+
+📌 How it works:
+         * $_COOKIE["user"] → Retrieves the value of the cookie.
+         * isset($_COOKIE["user"]) → Checks if the cookie exists before displaying it.
+________________
+
+
+Step 3: Delete the Cookie (delete_cookie.php)
+This script deletes the "user" cookie.
+php
+CopyEdit
+<?php
+// Delete the cookie by setting expiration time in the past
+setcookie("user", "", time() - 3600, "/");
+
+
+echo "Cookie 'user' has been deleted!";
+?>
+
+
+📌 How it works:
+         * Setting time() - 3600 ensures the cookie expires immediately.
+________________
+
+
+Step 4: Testing the Cookie Scripts
+         1. Save the three PHP files (set_cookie.php, get_cookie.php, and delete_cookie.php) in your server directory (htdocs in XAMPP).
+         2. Open a browser and visit:
+         * 👉 http://localhost/set_cookie.php → Sets the cookie
+         * 👉 http://localhost/get_cookie.php → Retrieves and displays the cookie
+         * 👉 http://localhost/delete_cookie.php → Deletes the cookie
+         3. Refresh get_cookie.php after deleting the cookie to confirm it's gone.
+✅ Let me know if you need modifications! 🚀
+4o
+You said:
+5)        Write a PHP script to start the session then under the session store “username” with the value “John Doe” and “email” with the value john@gmail.com. Write another PHP script to retrieve the “username” and “email” from the session and display their value into the browser. At last write a PHP script to remove “username” and “email” from the session.
+ChatGPT said:
+Step 1: Start a Session and Store Data (start_session.php)
+This script starts a session and stores "username" and "email" values.
+php
+CopyEdit
+<?php
+// Start the session
+session_start();
+
+
+// Store session data
+$_SESSION["username"] = "John Doe";
+$_SESSION["email"] = "john@gmail.com";
+
+
+echo "Session variables 'username' and 'email' have been set!";
+?>
+
+
+📌 How it works:
+         * session_start(); → Starts a new session or resumes an existing one.
+         * $_SESSION["key"] = "value"; → Stores session variables.
+________________
+
+
+Step 2: Retrieve and Display Session Data (get_session.php)
+This script retrieves and displays the session variables.
+php
+CopyEdit
+<?php
+// Start the session
+session_start();
+
+
+// Check if session variables exist and display them
+if(isset($_SESSION["username"]) && isset($_SESSION["email"])) {
+    echo "<h2>Session Data</h2>";
+    echo "<p><strong>Username:</strong> " . $_SESSION["username"] . "</p>";
+    echo "<p><strong>Email:</strong> " . $_SESSION["email"] . "</p>";
+} else {
+    echo "Session variables are not set.";
+}
+?>
+
+
+📌 How it works:
+         * session_start(); ensures session data is accessible.
+         * isset($_SESSION["username"]) checks if the session variables exist before displaying them.
+________________
+
+
+Step 3: Remove Session Variables (remove_session.php)
+This script removes "username" and "email" from the session.
+php
+CopyEdit
+<?php
+// Start the session
+session_start();
+
+
+// Unset session variables
+unset($_SESSION["username"]);
+unset($_SESSION["email"]);
+
+
+echo "Session variables 'username' and 'email' have been removed!";
+?>
+
+
+📌 How it works:
+         * unset($_SESSION["username"]); → Removes "username" from the session.
+         * unset($_SESSION["email"]); → Removes "email" from the session.
+________________
+
+
+Step 4: Testing the Session Scripts
+         1. Save the three PHP files (start_session.php, get_session.php, and remove_session.php) in your web server directory (htdocs in XAMPP).
+         2. Open a browser and visit:
+         * 👉 http://localhost/start_session.php → Starts the session and sets values
+         * 👉 http://localhost/get_session.php → Retrieves and displays session values
+         * 👉 http://localhost/remove_session.php → Removes session variables
+         3. Refresh get_session.php after deleting the session variables to confirm they are gone.
+✅ Let me know if you need any modifications! 🚀
+4o
+You said:
+6)        Write down about directives and controllers in Angular JS with suitable example.
+ChatGPT said:
+Directives and Controllers in AngularJS
+________________
+
+
+1. Directives in AngularJS
+What are Directives?
+Directives in AngularJS are markers (attributes, elements, or classes) in HTML that tell AngularJS to attach specific behaviors to elements or transform the DOM. They help in extending the functionality of HTML.
+Types of Directives
+         1. Built-in Directives: Provided by AngularJS, e.g., ng-model, ng-repeat, ng-if.
+         2. Custom Directives: User-defined directives for reusable components.
+Example: Built-in Directive (ng-model)
+html
+CopyEdit
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+    <title>AngularJS Directives</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+</head>
+<body ng-controller="myController">
+    <h2>Enter Your Name:</h2>
+    <input type="text" ng-model="name">
+    <p>Hello, {{ name }}!</p>
+    
+    <script>
+        var app = angular.module('myApp', []);
+        app.controller('myController', function($scope) {
+            $scope.name = "John Doe";
+        });
+    </script>
+</body>
+</html>
+
+
+📌 Explanation:
+         * ng-model="name" binds input to the scope variable name.
+         * {{ name }} dynamically updates as the user types.
+         * ng-controller="myController" attaches the controller to the HTML.
+________________
+
+
+Example: Custom Directive
+html
+CopyEdit
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+    <title>Custom Directive</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+</head>
+<body>
+    <my-directive></my-directive>
+
+
+    <script>
+        var app = angular.module('myApp', []);
+
+
+        app.directive('myDirective', function() {
+            return {
+                template: "<h2>This is a Custom Directive!</h2>"
+            };
+        });
+    </script>
+</body>
+</html>
+
+
+📌 Explanation:
+         * The directive <my-directive> is created using app.directive().
+         * It injects a simple HTML template into the DOM.
+________________
+
+
+2. Controllers in AngularJS
+What is a Controller?
+A controller in AngularJS is a JavaScript function that defines the application logic and interacts with the view via $scope.
+Example: Controller Usage
+html
+CopyEdit
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+    <title>AngularJS Controller</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+</head>
+<body ng-controller="studentController">
+    <h2>Student Information</h2>
+    <p>Name: {{ student.name }}</p>
+    <p>Age: {{ student.age }}</p>
+    
+    <script>
+        var app = angular.module('myApp', []);
+
+
+        app.controller('studentController', function($scope) {
+            $scope.student = {
+                name: "Alice",
+                age: 22
+            };
+        });
+    </script>
+</body>
+</html>
+
+
+📌 Explanation:
+         * ng-controller="studentController" attaches the controller to the view.
+         * The controller sets $scope.student, which binds data to the view.
+________________
+
+
+Key Differences Between Directives and Controllers
+Feature
+	Directives
+	Controllers
+	Purpose
+	Extends HTML functionality
+	Controls business logic
+	Usage
+	Used as attributes/elements
+	Attached to HTML elements using ng-controller
+	Example
+	ng-model, ng-repeat, custom directives
+	Functions defining logic using $scope
+	________________
+
+
+Conclusion
+         * Directives extend HTML elements and modify the DOM.
+         * Controllers manage application logic and interact with the $scope.
+✅ Let me know if you need more examples or clarifications! 🚀
+4o
+You said:
+7)        Write down about Angular JS Modules with suitable example
+ChatGPT said:
+AngularJS Modules: Explanation with Example
+What is an AngularJS Module?
+A module in AngularJS is a container for different parts of an application, such as controllers, services, directives, and filters. It helps in organizing and structuring the code efficiently.
+Why Use AngularJS Modules?
+         * Encapsulates the application components.
+         * Promotes better structure and maintainability.
+         * Avoids global variable pollution.
+________________
+
+
+Creating an AngularJS Module
+A module is created using the angular.module() function.
+Syntax:
+javascript
+CopyEdit
+var app = angular.module('moduleName', [dependencies]);
+
+
+         * 'moduleName' → Name of the module.
+         * [dependencies] → An array of dependent modules (can be empty []).
+________________
+
+
+Example: AngularJS Module Usage
+This example demonstrates a simple AngularJS application using a module.
+Step 1: Create an HTML File (index.html)
+html
+CopyEdit
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+    <title>AngularJS Module Example</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+</head>
+<body ng-controller="myController">
+    <h2>AngularJS Modules Example</h2>
+    <p>{{ message }}</p>
+
+
+    <script src="app.js"></script> <!-- Include the JavaScript file -->
+</body>
+</html>
+
+
+________________
+
+
+Step 2: Create an AngularJS Module (app.js)
+javascript
+CopyEdit
+// Define a module named 'myApp'
+var app = angular.module('myApp', []);
+
+
+// Create a controller inside the module
+app.controller('myController', function($scope) {
+    $scope.message = "Hello from AngularJS Module!";
+});
+
+
+________________
+
+
+Explanation
+         1. angular.module('myApp', []) → Creates a module named 'myApp'.
+         2. ng-app="myApp" → Attaches the module to the HTML.
+         3. app.controller('myController', function($scope) {...} → Defines a controller inside the module.
+         4. ng-controller="myController" → Binds the controller to the HTML.
+         5. $scope.message → Stores the message displayed in the view.
+________________
+
+
+Benefits of Using Modules
+✔ Modularity: Divides the app into small, reusable components.
+✔ Dependency Management: Manages dependencies like routing and services.
+✔ Scalability: Supports large applications.
+________________
+
+
+Conclusion
+         * AngularJS modules organize the application into structured components.
+         * They encapsulate controllers, services, directives, and filters.
+         * Example above shows a module "myApp" with a controller "myController" displaying a message.
+✅ Let me know if you need more examples or modifications! 🚀
+4o
+You said:
+8)        Write down an Angular JS program which gives the uses of Array.
+ChatGPT said:
+AngularJS Program Using Arrays
+Concept:
+Arrays in AngularJS are used to store multiple values in a single variable. They can be used inside controllers and displayed dynamically in the view using ng-repeat.
+________________
+
+
+Example: Displaying an Array of Students
+Step 1: Create the HTML File (index.html)
+html
+CopyEdit
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+    <title>AngularJS Array Example</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+</head>
+<body ng-controller="studentController">
+    <h2>Student List</h2>
+    
+    <!-- Display Array Data using ng-repeat -->
+    <ul>
+        <li ng-repeat="student in students">
+            Name: {{ student.name }}, Age: {{ student.age }}, Grade: {{ student.grade }}
+        </li>
+    </ul>
+
+
+    <script src="app.js"></script> <!-- Include AngularJS script -->
+</body>
+</html>
+
+
+________________
+
+
+Step 2: Create the JavaScript File (app.js)
+javascript
+CopyEdit
+// Define an AngularJS module
+var app = angular.module('myApp', []);
+
+
+// Define a controller with an array
+app.controller('studentController', function($scope) {
+    $scope.students = [
+        { name: "Alice", age: 20, grade: "A" },
+        { name: "Bob", age: 22, grade: "B" },
+        { name: "Charlie", age: 21, grade: "A" },
+        { name: "David", age: 23, grade: "C" }
+    ];
+});
+
+
+________________
+
+
+Explanation
+         1. Define a Module:
+         * angular.module('myApp', []) creates a new module.
+         2. Create a Controller with an Array:
+         * The controller studentController initializes an array of students.
+         * Each student has name, age, and grade properties.
+         3. Display Data using ng-repeat:
+         * ng-repeat="student in students" loops through the array and displays each student's details dynamically.
+________________
+
+
+Output:
+plaintext
+CopyEdit
+Student List
+- Name: Alice, Age: 20, Grade: A
+- Name: Bob, Age: 22, Grade: B
+- Name: Charlie, Age: 21, Grade: A
+- Name: David, Age: 23, Grade: C
+
+
+________________
+
+
+Uses of Arrays in AngularJS
+✔ Store multiple values in a single variable.
+ ✔ Dynamic data binding with ng-repeat.
+ ✔ Easier data manipulation using functions like filter, sort, and push.
+✅ Let me know if you need more features, such as adding/removing elements! 🚀
+4o
+You said:
+9)        Write down an Angular JS program which uses the following three directives within the program. a) ng-model         b) ng-repeat                c) ng-if
+ChatGPT said:
+AngularJS Program Using ng-model, ng-repeat, and ng-if
+Concepts:
+         1. ng-model → Binds input fields to AngularJS variables.
+         2. ng-repeat → Loops through arrays and displays items dynamically.
+         3. ng-if → Conditionally displays elements based on a condition.
+________________
+
+
+Example: Dynamic Student List with Conditional Display
+Step 1: Create the HTML File (index.html)
+html
+CopyEdit
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+    <title>AngularJS Directives Example</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+</head>
+<body ng-controller="studentController">
+    <h2>AngularJS Directives Example</h2>
+
+
+    <!-- Input fields using ng-model -->
+    <input type="text" ng-model="newStudent" placeholder="Enter Student Name">
+    <button ng-click="addStudent()">Add Student</button>
+
+
+    <h3>Student List</h3>
+    
+    <!-- Using ng-repeat to display student list -->
+    <ul>
+        <li ng-repeat="student in students">
+            {{ student }}
+            <button ng-click="removeStudent($index)">Remove</button>
+        </li>
+    </ul>
+
+
+    <!-- Using ng-if to show message when list is empty -->
+    <p ng-if="students.length === 0">No students in the list.</p>
+
+
+    <script src="app.js"></script> <!-- Include AngularJS script -->
+</body>
+</html>
+
+
+________________
+
+
+Step 2: Create the JavaScript File (app.js)
+javascript
+CopyEdit
+// Define an AngularJS module
+var app = angular.module('myApp', []);
+
+
+// Define a controller with an array
+app.controller('studentController', function($scope) {
+    // Initialize an array of students
+    $scope.students = ["Alice", "Bob", "Charlie"];
+
+
+    // Function to add a new student
+    $scope.addStudent = function() {
+        if ($scope.newStudent) {
+            $scope.students.push($scope.newStudent);
+            $scope.newStudent = ""; // Clear input field
+        }
+    };
+
+
+    // Function to remove a student
+    $scope.removeStudent = function(index) {
+        $scope.students.splice(index, 1);
+    };
+});
+
+
+________________
+
+
+Explanation
+         1. ng-model="newStudent"
+         * Binds the input field to the newStudent variable.
+         2. ng-repeat="student in students"
+         * Loops through the students array and displays each name dynamically.
+         3. ng-if="students.length === 0"
+         * Displays the message "No students in the list." when the array is empty.
+________________
+
+
+Features
+✔ Dynamic input handling (ng-model).
+ ✔ List rendering (ng-repeat).
+ ✔ Conditional rendering (ng-if).
+ ✔ Adding and removing students with real-time updates.
+________________
+
+
+Output
+mathematica
+CopyEdit
+Enter Student Name: [ User Input Field ] (Button: Add Student)
+
+
+Student List:
+- Alice   [Remove Button]
+- Bob     [Remove Button]
+- Charlie [Remove Button]
+
+
+(No students in the list message appears when empty)
+
+
+✅ Let me know if you need any modifications! 🚀
+4o
+You said:
+Write down an Angular JS program which gives the uses of Forms, inputs and Services
+ChatGPT said:
+AngularJS Program Demonstrating Forms, Inputs, and Services
+Concepts Covered:
+         1. Forms (ng-submit) → Used to handle form submissions.
+         2. Inputs (ng-model) → Binds user input to scope variables.
+         3. Services ($http) → Used for data retrieval (e.g., fetching API data).
+________________
+
+
+Example: User Registration Form with HTTP Service
+Step 1: Create the HTML File (index.html)
+html
+CopyEdit
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+    <title>AngularJS Forms, Inputs, and Services</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+</head>
+<body ng-controller="userController">
+
+
+    <h2>User Registration Form</h2>
+
+
+    <!-- Form using ng-submit -->
+    <form ng-submit="registerUser()">
+        <label>Name:</label>
+        <input type="text" ng-model="user.name" required>
+        <br><br>
+
+
+        <label>Email:</label>
+        <input type="email" ng-model="user.email" required>
+        <br><br>
+
+
+        <button type="submit">Register</button>
+    </form>
+
+
+    <h3>Registered Users</h3>
+    <ul>
+        <li ng-repeat="user in users">
+            {{ user.name }} ({{ user.email }})
+        </li>
+    </ul>
+
+
+    <script src="app.js"></script> <!-- Include AngularJS script -->
+</body>
+</html>
+
+
+________________
+
+
+Step 2: Create the JavaScript File (app.js)
+javascript
+CopyEdit
+// Define an AngularJS module
+var app = angular.module('myApp', []);
+
+
+// Define a controller
+app.controller('userController', function($scope, userService) {
+    $scope.users = []; // Initialize empty user list
+
+
+    // Function to register a new user
+    $scope.registerUser = function() {
+        userService.addUser($scope.user);
+        $scope.users = userService.getUsers(); // Update user list
+        $scope.user = {}; // Clear form
+    };
+});
+
+
+// Define a service to manage users
+app.service('userService', function() {
+    var users = []; // Private array to store users
+
+
+    // Function to add a user
+    this.addUser = function(user) {
+        users.push(user);
+    };
+
+
+    // Function to get all users
+    this.getUsers = function() {
+        return users;
+    };
+});
+
+
+________________
+
+
+Explanation
+         1. Forms (ng-submit="registerUser()")
+         * The form submits data using ng-submit, calling the registerUser function.
+         2. Inputs (ng-model)
+         * The name and email fields are bound to the user object using ng-model.
+         3. Services (userService)
+         * userService is created to store and manage users.
+         * addUser() adds users to the list.
+         * getUsers() returns the user list to display.
+________________
+
+
+Features
+✔ User-friendly registration form.
+ ✔ Real-time data binding with ng-model.
+ ✔ Encapsulated logic using AngularJS services.
+ ✔ Data updates dynamically without reloading the page.
+________________
+
+
+Output
+less
+CopyEdit
+User Registration Form
+----------------------
+Name:  [ User Input Field ]
+Email: [ User Input Field ]
+[ Register Button ]
+
+
+Registered Users:
+- John Doe (john@example.com)
+- Alice Smith (alice@gmail.com)
